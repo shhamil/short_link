@@ -1,0 +1,24 @@
+{% extends 'short_link/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+  {% block title %}{{ user.username }}{% endblock %}
+
+    {% block content %}
+    {% if user.is_authenticated %}
+          <div class="col-lg-4 col-md-6 mb-4 mt-3">
+            <div class="card h-100">
+              <div class="card-body">
+                <h4 class="card-title">
+                  <p>{{user.first_name}} {{ user.last_name }}</p>
+                </h4>
+              </div>
+              <div class="card-footer">
+
+              </div>
+            </div>
+          </div>
+    {% else %}
+    Привет
+    {% endif %}
+    {% endblock %}

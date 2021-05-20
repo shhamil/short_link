@@ -1,0 +1,14 @@
+{% extends 'short_link/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}Сокращение ссылки{% endblock %}
+
+{% block content %}
+    <form method="post">
+      {% csrf_token %}
+      {% bootstrap_form form layout='horizontal' %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn btn-dark">Сгенерировать ссылку</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "short_link/base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block content %}
+{% load static %}
+<h2>Регистрация нового пользователя</h2>
+<form method="post">
+  {% csrf_token %}
+  {% bootstrap_form form layout='horizontal' %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button type="submit" class="btn btn-dark">Регистрация</button>
+</form>
+{% endblock %}

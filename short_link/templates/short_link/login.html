@@ -1,0 +1,17 @@
+{% extends "short_link/base.html" %}
+{% load trans from i18n %}
+{% block title %}Вход{% endblock %}
+{% load bootstrap4 %}
+{% block content %}
+<h2>Вход</h2>
+{% if user.is_authenticated %}
+<p>Вы уже выполнили вход</p>
+{% else %}
+<form method="post">
+  {% csrf_token %}
+  {% bootstrap_form form layout='horizontal' %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <button type="submit" class="btn btn-dark">Войти</button>
+</form>
+ {% endif %}
+{% endblock %}
