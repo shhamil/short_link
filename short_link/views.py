@@ -1,16 +1,22 @@
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.urls import reverse_lazy
 from .forms import *
 from .models import *
 from .services import shorting_url
 
 
-class IndexView(TemplateView):
+class IndexView(ListView):
     """Главная страница"""
+    model = Link
     template_name = 'short_link/index.html'
+    context_object_name = 'links'
+
+    def get_queryset(self):
+        queryset = Link.objects.filter(user=self.request.user.pk)
+        return queryset
 
 
 class UserLoginView(LoginView):
@@ -27,17 +33,34 @@ class RegisterView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('short_link:index')
 
 
-class CreateShortUrl(LoginRequiredMixin, CreateView):
+class CreateShortLink(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     """Сокращение ссылки"""
     model = Link
-    template_name = 'short_link/url_shorting.html'
+    template_name = 'short_link/link_create.html'
     success_message = 'Ссылка создана!'
     form_class = LinkCreateForm
     success_url = reverse_lazy('short_link:index')
 
     def get_form_kwargs(self):
-        kwargs = super(CreateShortUrl, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
-        kwargs['short_url'] = shorting_url(self.request.POST.get('url'))
+        kwargs = super(CreateShortLink, self).get_form_kwargs()
+        kwargs['pk'] = self.request.user.pk
+
         return kwargs
 
+
+class DeleteLink(LoginRequiredMixin, DeleteView):
+    model = Link
+    template_name = 'short_link/link_delete.html'
+    success_url = reverse_lazy('short_link:index')
+
+
+class UpdateLink(LoginRequiredMixin, UpdateView):
+    model = Link
+    template_name = 'short_link/link_update.html'
+    form_class = LinkUpdateForm
+    success_url = reverse_lazy('short_link:index')
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateLink, self).get_form_kwargs()
+        kwargs['pk'] = self.request.user.pk
+        return kwargs

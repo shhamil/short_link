@@ -6,18 +6,25 @@
 
     {% block content %}
     {% if user.is_authenticated %}
-          <div class="col-lg-4 col-md-6 mb-4 mt-3">
-            <div class="card h-100">
-              <div class="card-body">
-                <h4 class="card-title">
-                  <p>{{user.first_name}} {{ user.last_name }}</p>
-                </h4>
-              </div>
-              <div class="card-footer">
-
-              </div>
+      {% if links %}
+        <h3>Ваши ссылки:</h3>
+        {% for link in links %}
+          <div class="card bg-light mt-3">
+            <div class="card-header">
+              {{ link.date_create }}
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ link.title }}</h5>
+              <p class="card-text">Ваша ссылка: <a href="{{ link.url_for_shorting }}">{{ link.url_for_shorting }}</a></p>
+              <p class="card-text">Сокращенная ссылка: <a href="{{ link.short_url }}">{{ link.short_url }}</a></p>
+              <a href="{% url 'short_link:delete_link' slug=link.slug %}" class="btn btn-outline-dark my-2 my-sm-0">Удалить</a>
+              <a href="{% url 'short_link:update_link' slug=link.slug %}" class="btn btn-outline-dark my-2 my-sm-0">Изменить</a>
             </div>
           </div>
+        {% endfor %}
+      {% else %}
+        <h3>У вас пока нет ссылок.</h3>
+      {% endif %}
     {% else %}
     Привет
     {% endif %}

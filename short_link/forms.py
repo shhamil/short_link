@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
 from .models import *
+from .services import shorting_url
 
 
 class RegistrationForm(forms.ModelForm):
@@ -41,19 +42,52 @@ class RegistrationForm(forms.ModelForm):
         fields = ('username', 'email', 'password1', 'password2', 'first_name', 'last_name')
 
 
-class LinkCreateForm(forms.ModelForm):
+class LinkUpdateForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        self.short_url = kwargs.pop('short_url', None)
-        super(LinkCreateForm, self).__init__(*args, **kwargs)
+        self.user_pk = kwargs.pop('pk', None)
+        super(LinkUpdateForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        user = User.objects.get(pk=self.user_pk)
+        if Link.objects.filter(user=user, url_for_shorting=self.cleaned_data['url_for_shorting']).exists():
+            raise ValidationError('Такая ссылка уже существует!')
 
     def save(self, *args, **kwargs):
+        user = User.objects.get(pk=self.user_pk)
         link = super().save(commit=False)
-        link.short_url = self.short_url
-        link.user = self.user
+        link.short_url = shorting_url(link.url_for_shorting)
+        link.slug = user.username + link.short_url.replace('https://tinyurl.com/', '')
         link.save()
         return link
 
     class Meta:
         model = Link
-        fields = ('title', 'url')
+        fields = ('title', 'url_for_shorting')
+
+
+class LinkCreateForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user_pk = kwargs.pop('pk', None)
+        super(LinkCreateForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+        user = User.objects.get(pk=self.user_pk)
+        if Link.objects.filter(user=user, url_for_shorting=self.cleaned_data['url_for_shorting']).exists():
+            raise ValidationError('Такая ссылка уже существует!')
+
+    def save(self, *args, **kwargs):
+        user = User.objects.get(pk=self.user_pk)
+        link = super().save(commit=False)
+        link.user = user
+        link.short_url = shorting_url(link.url_for_shorting)
+        link.slug = user.username + link.short_url.replace('https://tinyurl.com/', '')
+        link.save()
+        return link
+
+    class Meta:
+        model = Link
+        fields = ('title', 'url_for_shorting')

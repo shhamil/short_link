@@ -10,5 +10,7 @@ urlpatterns = [
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('accounts/register/', RegisterView.as_view(), name='register'),
     path('accounts/profile/', IndexView.as_view(), name='profile'),
-    path('accounts/url_generator', CreateShortUrl.as_view(), name='short_url'),
+    path('accounts/profile/link_generator', CreateShortLink.as_view(), name='short_link'),
+    path('accounts/profile/link_delete/<str:slug>', DeleteLink.as_view(), name='delete_link'),
+    path('accounts/profile/link_update/<str:slug>', UpdateLink.as_view(), name='update_link'),
 ]

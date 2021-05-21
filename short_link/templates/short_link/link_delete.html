@@ -1,0 +1,14 @@
+{% extends "short_link/base.html" %}
+
+{% load bootstrap4 %}
+{% block title %}Удаление ссылки{% endblock %}
+
+{% block content %}
+
+<h2>Удаление друга {{ link.title }}</h2>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-dark">Удалить</button>
+</form>
+
+{% endblock %}
