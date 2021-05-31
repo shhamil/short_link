@@ -54,6 +54,17 @@ class DeleteLink(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('short_link:index')
 
 
+class TokenView(ListView):
+    """Главная страница"""
+    model = Token
+    template_name = 'short_link/token.html'
+    context_object_name = 'token'
+
+    def get_queryset(self):
+        queryset = Token.objects.filter(user=self.request.user.pk)
+        return queryset
+
+
 class UpdateLink(LoginRequiredMixin, UpdateView):
     model = Link
     template_name = 'short_link/link_update.html'

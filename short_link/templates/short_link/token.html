@@ -1,0 +1,12 @@
+{% extends 'short_link/base.html' %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}Токен{% endblock %}
+{% block content %}
+    {% if token %}
+    Ваш токен - {{ token }}
+    {% else %}
+    Сгенерировать токен
+    {% endif %}
+
+{% endblock %}

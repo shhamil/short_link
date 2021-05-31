@@ -47,7 +47,7 @@
           <a class="nav-link dropdown-toggle col-md-offset-4" id="navbarDropdown" href="#!" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user.first_name}} {{ user.last_name }}</a>
                                 <div class="dropdown-menu dropdown-menu-right  col-md-offset-4" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{% url 'short_link:short_link' %}">Сгенерировать ссылку</a>
-                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'short_link:token' %}">Токен</a>
                                     <a class="dropdown-item" href="{% url 'short_link:logout' %}">Выйти</a>
                                 </div>
           {% endif %}
