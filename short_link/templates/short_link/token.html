@@ -4,9 +4,11 @@
 {% block title %}Токен{% endblock %}
 {% block content %}
     {% if token %}
-    Ваш токен - {{ token }}
+        {% for toke in token %}
+            Ваш токен - <a href="#">{{ toke }}</a>
+        {% endfor %}
     {% else %}
-    Сгенерировать токен
+    <a href="{% url 'short_link:token_create'%}" class="btn btn-outline-dark my-2 my-sm-0">Сгенерировать токен</a>
     {% endif %}
 
 {% endblock %}

@@ -2,10 +2,47 @@ from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
-from django.urls import reverse_lazy
+from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, permission_classes
+from django.contrib.auth import authenticate
+from rest_framework.permissions import AllowAny
+from rest_framework.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK
+)
+from rest_framework.response import Response
 from .forms import *
 from .models import *
-from .services import shorting_url
+
+
+@csrf_exempt
+@api_view(["POST"])
+@permission_classes((AllowAny,))
+def login(request):
+    username = request.data.get("username")
+    password = request.data.get("password")
+    if username is None or password is None:
+        return Response({'error': 'Please provide both username and password'},
+                        status=HTTP_400_BAD_REQUEST)
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({'error': 'Invalid Credentials'},
+                        status=HTTP_404_NOT_FOUND)
+    token, _ = Token.objects.get_or_create(user=user)
+    return Response({'token': token.key},
+                    status=HTTP_200_OK)
+
+
+@csrf_exempt
+@api_view(["POST"])
+def sample_api(request):
+
+    data = {'sample_data': 123}
+    return Response(data, status=HTTP_200_OK)
 
 
 class IndexView(ListView):
@@ -61,8 +98,16 @@ class TokenView(ListView):
     context_object_name = 'token'
 
     def get_queryset(self):
-        queryset = Token.objects.filter(user=self.request.user.pk)
+        queryset = Token.objects.filter(user=self.request.user)
         return queryset
+
+
+def create_token(request):
+    token = Token()
+    token.key = default_token_generator.make_token(request.user)
+    token.user = request.user
+    token.save()
+    return HttpResponseRedirect(reverse('short_link:token'))
 
 
 class UpdateLink(LoginRequiredMixin, UpdateView):
