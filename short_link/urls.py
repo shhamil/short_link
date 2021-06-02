@@ -8,6 +8,7 @@ app_name = 'short_link'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('api/login', login),
+    path('api/sampleapi', link_api),
     path('accounts/logout/', LogoutView.as_view(next_page="/accounts/login/"), name='logout'),
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('accounts/register/', RegisterView.as_view(), name='register'),

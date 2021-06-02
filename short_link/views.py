@@ -17,6 +17,7 @@ from rest_framework.status import (
 from rest_framework.response import Response
 from .forms import *
 from .models import *
+from .services import *
 
 
 @csrf_exempt
@@ -39,9 +40,10 @@ def login(request):
 
 @csrf_exempt
 @api_view(["POST"])
-def sample_api(request):
-
-    data = {'sample_data': 123}
+def link_api(request):
+    url_for_shorting = request.POST.get("url_for_shorting")
+    short_url = shorting_url(url_for_shorting)
+    data = {'short_link': short_url}
     return Response(data, status=HTTP_200_OK)
 
 
@@ -81,7 +83,6 @@ class CreateShortLink(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super(CreateShortLink, self).get_form_kwargs()
         kwargs['pk'] = self.request.user.pk
-
         return kwargs
 
 
