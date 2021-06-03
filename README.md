@@ -1,5 +1,5 @@
 # ShortLink
-
+### Commands for local deployment
 - git clone https://github.com/shhamil/short_link
 - python3 -m venv myvenv
 - pip3 install -r requirements.txt
