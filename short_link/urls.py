@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from django.contrib.auth.views import LogoutView
 from .views import *
 
@@ -8,7 +8,8 @@ app_name = 'short_link'
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('api/login', login),
-    path('api/sampleapi', link_api),
+    path('api/auth_url_api', link_api),
+    path('api/url_api', link_api_without_token),
     path('accounts/logout/', LogoutView.as_view(next_page="/accounts/login/"), name='logout'),
     path('accounts/login/', UserLoginView.as_view(), name='login'),
     path('accounts/register/', RegisterView.as_view(), name='register'),

@@ -43,6 +43,15 @@ def login(request):
 def link_api(request):
     url_for_shorting = request.POST.get("url_for_shorting")
     short_url = shorting_url(url_for_shorting)
+    Link.objects.create(user=request.user, short_url=short_url, url_for_shorting=url_for_shorting, slug=request.user.username + short_url.replace('https://tinyurl.com/', ''))
+    data = {'short_link': short_url}
+    return Response(data, status=HTTP_200_OK)
+
+
+@api_view(["post"])
+def link_api_without_token(request):
+    url_for_shorting = request.POST.get("url_for_shorting")
+    short_url = shorting_url(url_for_shorting)
     data = {'short_link': short_url}
     return Response(data, status=HTTP_200_OK)
 
@@ -87,13 +96,14 @@ class CreateShortLink(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 
 class DeleteLink(LoginRequiredMixin, DeleteView):
+    """Удаление ссылки"""
     model = Link
     template_name = 'short_link/link_delete.html'
     success_url = reverse_lazy('short_link:index')
 
 
 class TokenView(ListView):
-    """Главная страница"""
+    """Api"""
     model = Token
     template_name = 'short_link/token.html'
     context_object_name = 'token'
@@ -112,6 +122,7 @@ def create_token(request):
 
 
 class UpdateLink(LoginRequiredMixin, UpdateView):
+    """"Изменение ссылки"""
     model = Link
     template_name = 'short_link/link_update.html'
     form_class = LinkUpdateForm
