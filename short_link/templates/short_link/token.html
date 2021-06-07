@@ -5,37 +5,20 @@
 {% block content %}
 <h3>Примеры работы</h3>
 <h4>Пример1(Ссылка появится в списке ваших ссылок):</h4>
-<div class="container">
-    <div class="line number1 index0 alt2">
-        <code class="python keyword">import requests</code>
-    </div>
-    <div class="line number2 index0 alt2">
-        <code class="python keyword">response = requests.post('http://127.0.0.1:8000/api/login', json={'username':'#yourUsername#', 'password':'#yourPswrd#'})</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">response_json = response.json()</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">response_api = requests.post('http://127.0.0.1:8000/api/sampleapi', headers={'Authorization': 'Token ' + response_json["token"]}, data={'url_for_shorting': '#yourUrl#'})</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">response_url_json = response_api.json()</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">print(response_url_json["short_link"])</code>
-    </div>
+<div style="width:75%;height:25%;line-height:3em; overflow-x:scroll; overflow-y: scroll;padding:5px;">
+<code style="white-space: nowrap" class="python keyword">import requests</code>
+<code style="white-space: nowrap" class="python keyword">response = requests.post('http://shortlinks.pythonanywhere.com/api/auth_url_api', headers={'Authorization': 'Token ' + #yourToken#}, data={'url_for_shorting': '#yourUrl#'})</code>
+<code style="white-space: nowrap" class="python keyword">response_json = response_api.json()</code>
+<code style="white-space: nowrap" class="python keyword">print(response_json["short_link"])</code>
 </div>
+<br>
+<br>
 <h4>Пример2(Ссылка не появится в списке ваших ссылок):</h4>
-    <div class="container">
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">response= requests.post('http://127.0.0.1:8000/api/url_api', headers={'Authorization': 'Token ' + '#yourToken#'}, data={'url_for_shorting': '#yourUrl#'})</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">response_json = response.json()</code>
-    </div>
-    <div class="line number3 index0 alt2">
-        <code class="python keyword">print(response_json["short_link"])</code>
-    </div>
+<div style="width:75%;height:25%;line-height:3em; overflow-x:scroll; overflow-y: scroll;padding:5px;">
+<code style="white-space: nowrap" class="python keyword">import requests</code>
+<code style="white-space: nowrap" class="python keyword">response= requests.post('http://shortlinks.pythonanywhere.com/api/url_api', headers={'Authorization': 'Token ' + '#yourToken#'}, data={'url_for_shorting': '#yourUrl#'})</code>
+<code style="white-space: nowrap" class="python keyword">response_json = response.json()</code>
+<code style="white-space: nowrap" class="python keyword">print(response_json["short_link"])</code>
 </div>
 <hr>
     {% if token %}

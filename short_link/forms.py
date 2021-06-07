@@ -68,6 +68,7 @@ class LinkUpdateForm(forms.ModelForm):
 
 
 class LinkCreateForm(forms.ModelForm):
+    url_for_shorting = forms.CharField(label="Ссылка для сокращения")
 
     def __init__(self, *args, **kwargs):
         self.user_pk = kwargs.pop('pk', None)
